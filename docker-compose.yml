@@ -1,0 +1,21 @@
+version: '3.3'
+volumes:
+  data:
+services:
+  postgres:
+    image: postgres
+    restart: always
+    container_name: app
+    working_dir: /application
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=app
+    ports:
+      - '5432:5432'
+  redis:
+    image: redis:alpine
+    ports:
+      - '6379:6379'
