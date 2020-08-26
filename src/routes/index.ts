@@ -1,9 +1,9 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import ProductsController from '../controllers/ProductsController';
 
+const productsController = new ProductsController();
 const routes = Router();
 
-routes.get('/', (request: Request, response: Response) => {
-  return response.json({ ok: true });
-});
+routes.get('/products', productsController.index);
 
 export default routes;
