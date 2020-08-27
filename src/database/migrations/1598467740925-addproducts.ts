@@ -10,8 +10,6 @@ export default class addproducts1598467740925 implements MigrationInterface {
             name: 'id',
             type: 'varchar',
             isPrimary: true,
-            generationStrategy: 'uuid',
-            default: 'uuid_generate_v4()',
           },
           {
             name: 'name',
@@ -32,7 +30,7 @@ export default class addproducts1598467740925 implements MigrationInterface {
       }),
     );
     await queryRunner.query(
-      "INSERT INTO products(name) VALUES ('mario'), ('luigi'), ('bowser')",
+      "INSERT INTO products(id, name) VALUES ('1', 'mario'), ('2','luigi'), ('3','bowser')",
     );
   }
 
