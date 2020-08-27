@@ -31,6 +31,9 @@ export default class addproducts1598467740925 implements MigrationInterface {
         ],
       }),
     );
+    await queryRunner.query(
+      "INSERT INTO products(name) VALUES ('mario'), ('luigi'), ('bowser')",
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
