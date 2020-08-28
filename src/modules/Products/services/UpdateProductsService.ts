@@ -2,11 +2,8 @@ import { getCustomRepository } from 'typeorm';
 import ProductsRepository from '../repository/ProductsRepository';
 import Product from '../models/Product';
 import RedisProvider from '../../../shared/RedisProvider/implementations/RedisProvider';
-
-interface IData {
-  id: string;
-  name: string;
-}
+import CompareBodies from '../../../Utils/CompareBodies';
+import AppError from '../../../Error/AppError';
 
 class UpdateProductsService {
   private redis: RedisProvider;
@@ -15,11 +12,18 @@ class UpdateProductsService {
     this.redis = new RedisProvider();
   }
 
-  public async execute(data: IData[]): Promise<Product[] | null> {
+  public async execute(data: Product[]): Promise<Product[] | null> {
     const productsRepository = getCustomRepository(ProductsRepository);
-    const compareLastUpdate = await this.redis.recover<Product[]>(
+    const rememberLastUpdate = await this.redis.recover<Product[]>(
       'products_list:fake_user',
     );
+
+    if (rememberLastUpdate) {
+      if (!CompareBodies(data, rememberLastUpdate)) {
+        throw new AppError('Error', 401);
+      }
+      console.log(CompareBodies(data, rememberLastUpdate));
+    }
 
     const ids = data.filter(dataId => dataId.id);
     const products = await productsRepository.findByIds(ids);
