@@ -10,7 +10,7 @@ export default class RedisProvider implements IRedisProvider {
   }
 
   public async save(key: string, value: any): Promise<void> {
-    await this.client.set(key, JSON.stringify(value));
+    await this.client.set(key, JSON.stringify(value), 'EX', 60 * 10);
   }
 
   public async recover<T>(key: string): Promise<T | null> {

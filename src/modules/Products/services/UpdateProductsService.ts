@@ -17,6 +17,9 @@ class UpdateProductsService {
 
   public async execute(data: IData[]): Promise<Product[] | null> {
     const productsRepository = getCustomRepository(ProductsRepository);
+    const compareLastUpdate = await this.redis.recover<Product[]>(
+      'products_list:fake_user',
+    );
 
     const ids = data.filter(dataId => dataId.id);
     const products = await productsRepository.findByIds(ids);
@@ -28,6 +31,7 @@ class UpdateProductsService {
         await productsRepository.save(product);
       }
     });
+    // await this.redis.save('products_list:fake_user', products);
 
     return products;
   }
