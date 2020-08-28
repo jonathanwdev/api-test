@@ -13,6 +13,7 @@
     "express-async-errors": "^3.1.1",
     "ioredis": "^4.17.3",
     "pg": "^8.3.2",
+    "reflect-metadata": "^0.1.13",
     "ts-node-dev": "1.0.0-pre.44",
     "typeorm": "^0.2.25"
   },

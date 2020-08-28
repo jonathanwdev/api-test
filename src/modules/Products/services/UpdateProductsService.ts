@@ -17,16 +17,16 @@ class UpdateProductsService {
     const rememberLastUpdate = await this.redis.recover<Product[]>(
       'products_list:fake_user',
     );
-
-    if (rememberLastUpdate) {
-      if (!CompareBodies(data, rememberLastUpdate)) {
-        throw new AppError('Error', 401);
-      }
-      console.log(CompareBodies(data, rememberLastUpdate));
+    if (rememberLastUpdate && CompareBodies(data, rememberLastUpdate)) {
+      throw new AppError('You can not repeat the same request', 401);
     }
 
-    const ids = data.filter(dataId => dataId.id);
-    const products = await productsRepository.findByIds(ids);
+    const productIds = data.filter(el => el.id);
+    const products = await productsRepository.findByIds(productIds);
+
+    if (products.length === 0) {
+      throw new AppError('Products does not exist', 400);
+    }
 
     products.forEach(async product => {
       const newProduct = data.find(eachItem => eachItem.id === product.id);
@@ -35,7 +35,8 @@ class UpdateProductsService {
         await productsRepository.save(product);
       }
     });
-    // await this.redis.save('products_list:fake_user', products);
+
+    await this.redis.save('products_list:fake_user', products);
 
     return products;
   }
