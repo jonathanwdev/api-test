@@ -1,6 +1,7 @@
 import { getCustomRepository } from 'typeorm';
 import ProductsRepository from '../repository/ProductsRepository';
 import Product from '../models/Product';
+import RedisProvider from '../../../shared/RedisProvider/implementations/RedisProvider';
 
 interface IData {
   id: string;
@@ -8,8 +9,15 @@ interface IData {
 }
 
 class UpdateProductsService {
+  private redis: RedisProvider;
+
+  constructor() {
+    this.redis = new RedisProvider();
+  }
+
   public async execute(data: IData[]): Promise<Product[] | null> {
     const productsRepository = getCustomRepository(ProductsRepository);
+
     const ids = data.filter(dataId => dataId.id);
     const products = await productsRepository.findByIds(ids);
 

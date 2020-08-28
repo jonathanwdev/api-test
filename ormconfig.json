@@ -6,7 +6,7 @@
   "password": "root",
   "database": "app",
   "entities":[
-    "./src/models/*.ts"
+    "./src/modules/**/models/*.ts"
   ],
   "migrations":[
     "./src/database/migrations/*.ts"
