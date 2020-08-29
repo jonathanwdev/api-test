@@ -7,7 +7,8 @@
     "build": "tsc",
     "dev": "ts-node-dev --transpileOnly --ignore-watch node_modules src/server.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
-    "test": "jest"
+    "test": "jest",
+    "start":"node ./dist/src/server.js"
   },
   "dependencies": {
     "express": "^4.17.1",
